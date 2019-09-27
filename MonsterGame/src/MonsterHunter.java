@@ -3,12 +3,13 @@ import java.util.Scanner;
 
 public class MonsterHunter
 {
-   public static Monster[] monsterParty;
-   public static int playerHealth;
-   public static int playerStrength;
-   public static int playerDefense;
-   public static int MAXHEALTH;
-   public static Scanner sc;
+   private static Monster[] monsterParty;
+   private static int playerHealth;
+   private static int playerStrength;
+   private static int playerDefense;
+   private static int MAXHEALTH;
+   private static Scanner sc;
+   private static Random rand;
 
    public static void main(String[] args)
    {
@@ -87,7 +88,7 @@ public class MonsterHunter
          case 3:
             System.out
                      .println("As you prepare to defend against an attack, the monster heals");
-            monsterParty[0].getRoll(3);
+            getRoll(3);
             break;
       }
    }
@@ -124,7 +125,7 @@ public class MonsterHunter
             healRoll = getPlayerRoll(3);
             System.out.println("The monster decides to heal as well!");
             System.out.println("You heal for " + healRoll);
-            monsterParty[0].getRoll(3);
+            getRoll(3);
             break;
       }
 
@@ -211,6 +212,29 @@ public class MonsterHunter
       int choice = sc.nextInt();
 
       return choice;
+   }
+   
+   public static int getRoll(int Option)
+   {
+      Random rand = new Random();
+      int roll = 0;
+      switch (Option)
+      {
+         case 1:
+            roll = (rand.nextInt(this.strength)) + 1;
+            return roll;
+         case 2:
+            roll = (rand.nextInt(this.defense)) + 1;
+            return roll;
+         case 3:
+            roll = (rand.nextInt((this.MAXHEALTH) / 2)) + 1;
+            this.health += roll;
+            if (this.health > this.MAXHEALTH)
+               this.health = this.MAXHEALTH;
+            return roll;
+         default:
+            return roll;
+      }
    }
 
 }
