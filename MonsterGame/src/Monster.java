@@ -1,26 +1,38 @@
-import java.util.Random;
 
+/**
+ * The Monster class
+ *
+ * Keeps all the information about the monster.
+ * 
+ */
 public class Monster
 {
-   private int strength;
    private String name;
+
+   private int strength;
    private int defense;
    private int health;
-   private int MAXHEALTH;
-   String[] Size = { "Tiny", "Small", "Regular", "Large", "Massive" };
-   String[] Creature = { "Rat", "Goblin", "Naga", "Dragon", "Demon" };
-   private int nameIndex1;
-   private int nameIndex2;
 
-   public Monster()
+   private String[] Size = { "Tiny", "Small", "Regular", "Large", "Massive" };
+   private String[] Creature = { "Rat", "Goblin", "Naga", "Dragon", "Demon" };
+
+   private int sizeIdx;
+   private int creatureIdx;
+
+   public Monster(int sizeIdx, int creatureIdx)
    {
-      this.name = getRandName();
-      this.strength = setStrength();
-      this.defense = setDefense();
-      this.health = ((nameIndex2 + 1) * (this.defense + 1));
-      this.MAXHEALTH = this.health;
-      if (strength < 0)
-         strength = 0;
+      this.sizeIdx = sizeIdx;
+      this.creatureIdx = creatureIdx;
+
+      this.name = generateName();
+      this.strength = initStrength();
+      this.defense = initDefense();
+      this.health = ((this.creatureIdx + 1) * (this.defense + 1));
+   }
+
+   public String getName()
+   {
+      return this.name;
    }
 
    public int getDefense()
@@ -28,12 +40,9 @@ public class Monster
       return this.defense;
    }
 
-   public void setHealth(int damage)
+   public int getStrength()
    {
-      if (damage <= 0)
-         damage = 0;
-
-      this.health -= damage;
+      return this.strength;
    }
 
    public int getHealth()
@@ -41,39 +50,54 @@ public class Monster
       return this.health;
    }
 
-   private int setDefense()
+   public void setHealth(int health)
    {
-      int defense = nameIndex1 + 2;
-      if (nameIndex2 == 0)
-         defense += 0;
-      else if (nameIndex2 == 1)
+      this.health = health;
+   }
+
+   
+   
+   
+   /**
+    * @return the name of the monster
+    */
+   private String generateName()
+   {
+      String name = Size[sizeIdx] + " " + Creature[creatureIdx];
+      return name;
+   }
+
+   /**
+    * @return the initial defense of the monster
+    */
+   private int initDefense()
+   {
+      int defense = sizeIdx + 7;
+
+      if (creatureIdx == 1)
          defense -= 1;
-      else if (nameIndex2 == 2)
-         return defense;
-      else if (nameIndex2 == 3)
+      else if (creatureIdx == 3)
          defense *= 2;
       else
       {
          defense *= 3;
       }
+
       return defense;
    }
 
-   public int getStrength()
+   /**
+    * Setting the initial strength of the monster depending on it's size.
+    * 
+    * @return the initial strength of the monster
+    */
+   private int initStrength()
    {
-      return this.strength;
-   }
+      int strength = sizeIdx + 7;
 
-   private int setStrength()
-   {
-      int strength = nameIndex1 + 2;
-      if (nameIndex2 == 0)
-         strength += 0;
-      else if (nameIndex2 == 1)
+      if (creatureIdx == 1)
          strength -= 1;
-      else if (nameIndex2 == 2)
-         return strength;
-      else if (nameIndex2 == 3)
+      else if (creatureIdx == 3)
          strength *= 2;
       else
       {
@@ -83,50 +107,4 @@ public class Monster
       return strength;
    }
 
-   public String getName()
-   {
-      return this.name;
-   }
-
-   private String getRandName()
-   {
-      Random rand = new Random();
-      nameIndex1 = rand.nextInt(5);
-      nameIndex2 = rand.nextInt(5);
-
-      String name = Size[nameIndex1] + " " + Creature[nameIndex2];
-      return name;
-   }
-
-   public int getChoice()
-   {
-      int choice;
-      Random rand = new Random();
-      choice = (rand.nextInt(3)) + 1;
-
-      return choice;
-   }
-
-   public int getRoll(int Option)
-   {
-      Random rand = new Random();
-      int roll = 0;
-      switch (Option)
-      {
-         case 1:
-            roll = (rand.nextInt(this.strength)) + 1;
-            return roll;
-         case 2:
-            roll = (rand.nextInt(this.defense)) + 1;
-            return roll;
-         case 3:
-            roll = (rand.nextInt((this.MAXHEALTH) / 2)) + 1;
-            this.health += roll;
-            if (this.health > this.MAXHEALTH)
-               this.health = this.MAXHEALTH;
-            return roll;
-         default:
-            return roll;
-      }
-   }
 }
