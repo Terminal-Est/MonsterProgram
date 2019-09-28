@@ -3,7 +3,7 @@ import java.util.Scanner;
 
 public class MonsterHunter
 {
-   private static Monster[] monsterParty;
+   private static Monster theMonster;
    private static int playerHealth;
    private static int playerStrength;
    private static int playerDefense;
@@ -18,18 +18,15 @@ public class MonsterHunter
       playerDefense = (rand.nextInt(20) + 1);
       playerHealth = playerDefense * 2;
       MAXHEALTH = playerHealth;
-      monsterParty = new Monster[1];
+      theMonster = new Monster();
 
-      for (int i = 0; i < monsterParty.length; i++)
-      {
-         monsterParty[i] = new Monster();
-         System.out.printf("%25s%n%n", "YOU ARE FIGHTING");
-         System.out.printf("Monster Name:%22s%n%n", monsterParty[i].getName());
-         System.out.printf("Monster Defense:%19s%n", monsterParty[i].getDefense());
-         System.out.printf("Monster Strength:%18s%n", monsterParty[i].getStrength());
-         System.out.printf("Monster Health:%20s%n", monsterParty[i].getHealth());
-         System.out.println();
-      }
+      System.out.printf("%25s%n%n", "YOU ARE FIGHTING");
+      System.out.printf("Monster Name:%22s%n%n", theMonster.getName());
+      System.out.printf("Monster Defense:%19s%n", theMonster.getDefense());
+      System.out.printf("Monster Strength:%18s%n", theMonster.getStrength());
+      System.out.printf("Monster Health:%20s%n", theMonster.getHealth());
+      System.out.println();
+
       do
       {
          int choice = Prompt();
@@ -46,12 +43,12 @@ public class MonsterHunter
                break;
          }
          System.out.printf("Monster Health Remaining:%20s%n",
-                           monsterParty[0].getHealth());
+                           theMonster.getHealth());
          System.out.printf("Player Health Remaining:%21s%n", playerHealth);
-      } while (!(playerHealth <= 0) && !(monsterParty[0].getHealth() <= 0));
+      } while (!(playerHealth <= 0) && !(theMonster.getHealth() <= 0));
       if (playerHealth <= 0)
          System.out.println("You have been defeated!");
-      else if (monsterParty[0].getHealth() <= 0)
+      else if (theMonster.getHealth() <= 0)
       {
          System.out.println("You have defeated the monster!");
       }
@@ -62,13 +59,13 @@ public class MonsterHunter
 
    private static void defend()
    {
-      int choice = monsterParty[0].getChoice();
+      int choice = theMonster.getChoice();
       int defenseRoll;
       int monDamage;
       switch (choice)
       {
          case 1:
-            monDamage = monsterParty[0].getRoll(1);
+            monDamage = getRoll(1);
             defenseRoll = getPlayerRoll(2);
             int totalDamage = monDamage - defenseRoll;
             if (totalDamage <= 0)
@@ -95,13 +92,13 @@ public class MonsterHunter
 
    private static void heal()
    {
-      int choice = monsterParty[0].getChoice();
+      int choice = theMonster.getChoice();
       int healRoll;
       int monDamage;
       switch (choice)
       {
          case 1:
-            monDamage = monsterParty[0].getRoll(1);
+            monDamage = getRoll(1);
             playerHealth -= monDamage;
             if (playerHealth <= 0)
                break;
@@ -133,16 +130,16 @@ public class MonsterHunter
 
    private static void fight()
    {
-      int choice = monsterParty[0].getChoice();
+      int choice = theMonster.getChoice();
       int damageRoll;
       int monDamage;
       switch (choice)
       {
          case 1:
-            monDamage = monsterParty[0].getRoll(1);
+            monDamage = getRoll(1);
             playerHealth -= monDamage;
             damageRoll = getPlayerRoll(1);
-            monsterParty[0].setHealth(damageRoll);
+            theMonster.setHealth(damageRoll);
             System.out.println("You both attack each other at the same time!");
             System.out.println("You deal " + damageRoll + " points of damage");
             System.out.println("You are struck for " + monDamage +
@@ -152,14 +149,14 @@ public class MonsterHunter
          case 2:
             System.out.println("As you attack the monster guards");
             damageRoll = getPlayerRoll(1);
-            int monDefense = monsterParty[0].getRoll(2);
+            int monDefense = getRoll(2);
             int totaldamage = damageRoll - monDefense;
             if (totaldamage > 0)
             {
                System.out
                         .println("You managed to defeat the monsters defenses and dealt " +
                                  totaldamage + " damage");
-               monsterParty[0].setHealth(totaldamage);
+               theMonster.setHealth(totaldamage);
             }
             else
                System.out.println("The monsters defenses were impenetrable!");
@@ -169,10 +166,10 @@ public class MonsterHunter
             damageRoll = getPlayerRoll(1);
             System.out.println("As you attack the monster heals!");
             System.out.println("You hit for " + damageRoll);
-            if (monsterParty[0].getHealth() <= 0)
+            if (theMonster.getHealth() <= 0)
                break;
             else
-               monsterParty[0].getRoll(3);
+               getRoll(3);
             break;
       }
    }
@@ -213,28 +210,27 @@ public class MonsterHunter
 
       return choice;
    }
-   
-   public static int getRoll(int Option)
+
+   public static int getRoll(int option)
    {
       Random rand = new Random();
       int roll = 0;
-      switch (Option)
+      switch (option)
       {
          case 1:
-            roll = (rand.nextInt(this.strength)) + 1;
-            return roll;
+            roll = (rand.nextInt(theMonster.getStrength())) + 1;
+            break;
          case 2:
-            roll = (rand.nextInt(this.defense)) + 1;
-            return roll;
+            roll = (rand.nextInt(theMonster.getDefense())) + 1;
+            break;
          case 3:
-            roll = (rand.nextInt((this.MAXHEALTH) / 2)) + 1;
+            roll = (rand.nextInt((theMonster.MAXHEALTH) / 2)) + 1;
             this.health += roll;
-            if (this.health > this.MAXHEALTH)
-               this.health = this.MAXHEALTH;
-            return roll;
-         default:
-            return roll;
+            if (theMonster.health > theMonster.MAXHEALTH)
+               theMonster.health = theMonster.MAXHEALTH;
+            break;
       }
+      return roll;
    }
 
 }
