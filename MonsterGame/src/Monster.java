@@ -12,6 +12,7 @@ public class Monster
    private int strength;
    private int defense;
    private int health;
+   private int MAXHEALTH;
 
    private String[] Size = { "Tiny", "Small", "Regular", "Large", "Massive" };
    private String[] Creature = { "Rat", "Goblin", "Naga", "Dragon", "Demon" };
@@ -19,15 +20,16 @@ public class Monster
    private int sizeIdx;
    private int creatureIdx;
 
-   public Monster(int sizeIdx, int creatureIdx)
+   public Monster(int sizeIdx, int creatureIdx, int MAXHEALTH)
    {
       this.sizeIdx = sizeIdx;
       this.creatureIdx = creatureIdx;
+      this.MAXHEALTH = MAXHEALTH;
 
       this.name = generateName();
       this.strength = initStrength();
       this.defense = initDefense();
-      this.health = ((this.creatureIdx + 1) * (this.defense + 1));
+      this.setHealth((this.creatureIdx + 1) * (this.defense + 1));
    }
 
    public String getName()
@@ -52,12 +54,12 @@ public class Monster
 
    public void setHealth(int health)
    {
-      this.health = health;
+      if (health < this.MAXHEALTH)
+         this.health = health;
+      else
+         this.health = this.MAXHEALTH;
    }
 
-   
-   
-   
    /**
     * @return the name of the monster
     */
@@ -72,7 +74,7 @@ public class Monster
     */
    private int initDefense()
    {
-      int defense = sizeIdx + 7;
+      int defense = sizeIdx + 4;
 
       if (creatureIdx == 1)
          defense -= 1;
@@ -93,7 +95,7 @@ public class Monster
     */
    private int initStrength()
    {
-      int strength = sizeIdx + 7;
+      int strength = sizeIdx + 4;
 
       if (creatureIdx == 1)
          strength -= 1;

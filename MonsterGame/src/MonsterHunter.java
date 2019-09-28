@@ -16,21 +16,27 @@ public class MonsterHunter
    public static void main(String[] args)
    {
       rand = new Random();
-      playerStrength = (rand.nextInt(20) + 1);
-      playerDefense = (rand.nextInt(15) + 1);
+      
+      playerStrength = (rand.nextInt(14) + 7);
+      playerDefense = (rand.nextInt(11) + 5);
       playerHealth = playerDefense * 2;
       MAXHEALTH = playerHealth;
 
-      theMonster = new Monster(rand.nextInt(5), rand.nextInt(5));
+      theMonster = new Monster(rand.nextInt(5), rand.nextInt(5), MAXHEALTH);
 
+      System.out.printf(playerInfo("Human", "Player",
+                                   playerDefense, playerStrength,
+                                   playerHealth));
+      System.out.println();
       System.out.printf("%25s%n%n", "YOU ARE FIGHTING");
-      System.out.printf(monsterInfo());
+      System.out.printf(playerInfo("Monster", theMonster.getName(),
+                                   theMonster.getDefense(), theMonster.getStrength(),
+                                   theMonster.getHealth()));
       System.out.println();
 
       do
       {
-         //System.out.print("Monster Health"  );
-         
+
          int choice = Prompt();
          switch (choice)
          {
@@ -47,10 +53,9 @@ public class MonsterHunter
          System.out.printf("Monster Health Remaining:%20s%n",
                            theMonster.getHealth());
          System.out.printf("Player Health Remaining:%21s%n", playerHealth);
-         
-      } while ( playerHealth > 0 && theMonster.getHealth() > 0 );
 
-      
+      } while (playerHealth > 0 && theMonster.getHealth() > 0);
+
       System.out.println();
       if (playerHealth < 1)
          System.out.println("You have been defeated!");
@@ -82,7 +87,7 @@ public class MonsterHunter
    {
       int defenseRoll;
       int monDamage;
-      
+
       switch (monsterChoice())
       {
          case 1:
@@ -106,10 +111,7 @@ public class MonsterHunter
          case 3:
             System.out
                      .println("As you prepare to defend against an attack, the monster heals");
-            theMonster.setHealth(theMonster.getHealth() + monsterRoll(3));
-            if (theMonster.getHealth() > MAXHEALTH)
-               theMonster.setHealth(MAXHEALTH);
-            break;
+            monsterHeal(monsterRoll(3));
       }
    }
 
@@ -117,19 +119,24 @@ public class MonsterHunter
    {
       int healRoll;
       int monDamage;
-      
+
       switch (monsterChoice())
       {
          case 1:
             monDamage = monsterRoll(1);
+            System.out.println("The monster takes a slash at you, dealing " +
+                               monDamage + " damage.");
             playerHealth -= monDamage;
-            if (playerHealth <= 0)
-               break;
+            if (playerHealth < 1)
+            {
+               System.out
+                        .println("You died before you could heal.");
+               break; // player is dead
+            }
             else
             {
                healRoll = playerRoll(3);
-               System.out.println("The monster takes a slash at you, dealing " +
-                                  monDamage + " damage.");
+               playerHealth += healRoll;
                System.out
                         .println("You survive and heal for " + healRoll + "health.");
                break;
@@ -143,21 +150,28 @@ public class MonsterHunter
             break;
          case 3:
             healRoll = playerRoll(3);
+            playerHealth += healRoll;
             System.out.println("The monster decides to heal as well!");
             System.out.println("You heal for " + healRoll);
-            theMonster.setHealth(theMonster.getHealth() + monsterRoll(3));
-            if (theMonster.getHealth() > MAXHEALTH)
-               theMonster.setHealth(MAXHEALTH);
-            break;
+            monsterHeal(monsterRoll(3));
       }
 
+      if (playerHealth > MAXHEALTH)
+         playerHealth = MAXHEALTH;
+
+   }
+
+   private static void monsterHeal(int healAmount)
+   {
+      theMonster.setHealth(theMonster.getHealth() + healAmount);
+      System.out.println("The monster heal for " + healAmount);
    }
 
    private static void fight()
    {
       int damageRoll;
       int monDamage;
-      
+
       switch (monsterChoice())
       {
          case 1:
@@ -192,13 +206,12 @@ public class MonsterHunter
             damageRoll = playerRoll(1);
             System.out.println("As you attack the monster heals!");
             System.out.println("You hit for " + damageRoll);
-            if (theMonster.getHealth() <= 0)
-               break;
+            theMonster.setHealth(theMonster.getHealth() - damageRoll);
+            if (theMonster.getHealth() < 1)
+               break; // monster is dead
             else
             {
-               theMonster.setHealth(theMonster.getHealth() + monsterRoll(3));
-               if (theMonster.getHealth() > MAXHEALTH)
-                  theMonster.setHealth(MAXHEALTH);
+               monsterHeal(monsterRoll(3));
             }
       }
    }
@@ -210,19 +223,14 @@ public class MonsterHunter
       {
          case 1:
             roll = rand.nextInt(playerStrength) + 1;
-            return roll;
+            break;
          case 2:
             roll = rand.nextInt(playerDefense) + 1;
-            return roll;
+            break;
          case 3:
             roll = rand.nextInt((MAXHEALTH) / 2) + 1;
-            playerHealth += roll;
-            if (playerHealth > MAXHEALTH)
-               playerHealth = MAXHEALTH;
-            return roll;
-         default:
-            return roll;
       }
+      return roll;
 
    }
 
@@ -239,19 +247,19 @@ public class MonsterHunter
             break;
          case 3:
             roll = (rand.nextInt((MAXHEALTH) / 2)) + 1;
-            break;
       }
       return roll;
    }
 
-   private static String monsterInfo()
+   private static String playerInfo(String type, String name, int defence,
+                                    int strength, int health)
    {
       String info;
 
-      info = String.format("Monster Name:%22s%n%n", theMonster.getName());
-      info += String.format("Monster Defense:%19s%n", theMonster.getDefense());
-      info += String.format("Monster Strength:%18s%n", theMonster.getStrength());
-      info += String.format("Monster Health:%20s%n", theMonster.getHealth());
+      info = String.format("%9s Name:%22s%n%n", type, name);
+      info += String.format("%9s Defense:%19s%n", type, defence);
+      info += String.format("%9s Strength:%18s%n", type, strength);
+      info += String.format("%9s Health:%20s%n", type, health);
 
       return info;
    }
