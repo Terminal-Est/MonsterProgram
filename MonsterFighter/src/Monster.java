@@ -1,29 +1,38 @@
 
 public class Monster {
 
-	private int str;
-	private int intel;
-	private int dex;
+	private double str;
+	private double intel;
+	private double dex;
 	private int hp;
+	private String name;
+	private int lvl;
 
-	public Monster(int str, int intel, int dex, int hp) {
+	public Monster(String name, double str, double intel, double dex, int hp, int lvl) {
 		this.str = str;
 		this.intel = intel;
 		this.dex = dex;
 		this.hp = hp;
+		this.name = name;
+		this.lvl = lvl;
 	}
 	
-	public int setStr(int strength) {
+	public String setName(String name) {
+		this.name = name;
+		return name;
+	}
+	
+	public double setStr(double strength) {
 		this.str = strength;
 		return strength;
 	}
 	
-	public int setInt(int intelligence) {
+	public double setInt(double intelligence) {
 		this.intel = intelligence;
 		return intelligence;
 	}
 	
-	public int setDex(int dexterity) {
+	public double setDex(double dexterity) {
 		this.dex = dexterity;
 		return dexterity;
 	}
@@ -32,5 +41,10 @@ public class Monster {
 		this.hp = health;
 		return health;
 	}
-
+	
+	public int setLvl(int level) {
+		this.lvl = level;
+		return level;
+	}
+	
 }

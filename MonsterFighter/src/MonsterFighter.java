@@ -13,7 +13,7 @@ public class MonsterFighter {
 		String select;
 		boolean exit = false;
 		while (exit == false) {
-			print("Enter your selection!\n1 - Create Monster\n2 - Fight Monster\n3 - View a mnonster\n4 - Exit\nWhat do you choose?: ");
+			print("\n\nEnter your selection!\n1 - Create a Monster\n2 - Fight Monsters\n3 - View a Monster\n4 - Exit\nWhat do you choose?: ");
 			select = sc.next();
 			switch (select) {
 			case "1":
@@ -31,11 +31,33 @@ public class MonsterFighter {
 	}
 
 	private static void createMonster() {
-		
+		String name = "";
+		double str = 0;
+		double intel = 0;
+		double dex = 0;
+		double hp = 0;
+		if (count == 100) {
+			print("Monster roster full!");
+		} else {
+			print("Enter Monster name: ");
+			name = sc.next();
+			print("\nRoll for STRENGTH!");
+			str = (Math.rint(Math.random() * ((20 - 1) + 1)) + 1);
+			print("\nStrength is: " + str);
+			print("\nRoll for INTELLIGENCE!");
+			intel = (Math.rint(Math.random() * ((20 - 1) + 1)) + 1);
+			print("\nIntelligence is: " + intel);
+			print("\nRoll for DEXTERITY!");
+			dex = (Math.rint(Math.random() * ((20 - 1) + 1)) + 1);
+			print("\nDexterity is: " + dex);
+			hp = 100;
+			print("\nMonster HP is: " + hp);
+		}
+
 	}
 
 	private static String print(String input) {
-		System.out.println(input);
+		System.out.print(input);
 		return input;
 	}
 }
