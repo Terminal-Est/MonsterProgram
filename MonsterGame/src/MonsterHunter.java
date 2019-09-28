@@ -5,10 +5,11 @@ public class MonsterHunter
 {
    private static Monster theMonster;
 
+   private static String playerName;
    private static int playerHealth;
    private static int playerStrength;
    private static int playerDefense;
-   private static int MAXHEALTH;
+   private static int MAXPLAYERHEALTH;
 
    private static Scanner sc;
    private static Random rand;
@@ -16,15 +17,21 @@ public class MonsterHunter
    public static void main(String[] args)
    {
       rand = new Random();
-      
+      sc = new Scanner(System.in);
+
+      System.out.print("Enter your name: ");
+      playerName = sc.next();
+
       playerStrength = (rand.nextInt(14) + 7);
       playerDefense = (rand.nextInt(11) + 5);
       playerHealth = playerDefense * 2;
-      MAXHEALTH = playerHealth;
+      MAXPLAYERHEALTH = playerHealth;
 
-      theMonster = new Monster(rand.nextInt(5), rand.nextInt(5), MAXHEALTH);
+      // create the monster to fight
+      theMonster = new Monster(rand.nextInt(5), rand.nextInt(5), (int) Math.round(MAXPLAYERHEALTH * 1.5));
 
-      System.out.printf(playerInfo("Human", "Player",
+      System.out.println();
+      System.out.printf(playerInfo("Human", playerName,
                                    playerDefense, playerStrength,
                                    playerHealth));
       System.out.println();
@@ -37,7 +44,9 @@ public class MonsterHunter
       do
       {
 
-         int choice = Prompt();
+         System.out.println(menu());
+         int choice = sc.nextInt();
+                  
          switch (choice)
          {
             case 1:
@@ -50,18 +59,18 @@ public class MonsterHunter
                defend();
                break;
          }
-         System.out.printf("Monster Health Remaining:%20s%n",
+         System.out.printf("%s Health Remaining:%20s%n", theMonster.getName(),
                            theMonster.getHealth());
-         System.out.printf("Player Health Remaining:%21s%n", playerHealth);
+         System.out.printf("%s Health Remaining:%21s%n", playerName, playerHealth);
 
       } while (playerHealth > 0 && theMonster.getHealth() > 0);
 
       System.out.println();
       if (playerHealth < 1)
-         System.out.println("You have been defeated!");
+         System.out.println(playerName + " has been defeated!");
       else if (theMonster.getHealth() < 1)
       {
-         System.out.println("You have defeated the monster!");
+         System.out.println(playerName + " has defeated the "+ theMonster.getName() +"!");
       }
       else
       {
@@ -70,17 +79,16 @@ public class MonsterHunter
       }
    }
 
-   private static int Prompt()
+   private static String menu()
    {
-      sc = new Scanner(System.in);
-      System.out.printf("%30s%n%n", "What do you choose to do?");
-      System.out.printf("%20s%n", "1 - FIGHT");
-      System.out.printf("%19s%n", "2 - HEAL");
-      System.out.printf("%21s%n", "3 - DEFEND");
-      System.out.printf("%21s%n%n", "Make your choice:");
-      int choice = sc.nextInt();
+      String output;
+      output = String.format("%30s%n%n", "What do you choose to do?");
+      output += String.format("%20s%n", "1 - FIGHT");
+      output += String.format("%19s%n", "2 - HEAL");
+      output += String.format("%21s%n", "3 - DEFEND");
+      output += String.format("%21s", "Make your choice: ");
 
-      return choice;
+      return output;
    }
 
    private static void defend()
@@ -156,8 +164,8 @@ public class MonsterHunter
             monsterHeal(monsterRoll(3));
       }
 
-      if (playerHealth > MAXHEALTH)
-         playerHealth = MAXHEALTH;
+      if (playerHealth > MAXPLAYERHEALTH)
+         playerHealth = MAXPLAYERHEALTH;
 
    }
 
@@ -228,7 +236,7 @@ public class MonsterHunter
             roll = rand.nextInt(playerDefense) + 1;
             break;
          case 3:
-            roll = rand.nextInt((MAXHEALTH) / 2) + 1;
+            roll = rand.nextInt((MAXPLAYERHEALTH) / 2) + 1;
       }
       return roll;
 
@@ -246,11 +254,19 @@ public class MonsterHunter
             roll = rand.nextInt(theMonster.getDefense()) + 1;
             break;
          case 3:
-            roll = (rand.nextInt((MAXHEALTH) / 2)) + 1;
+            roll = (rand.nextInt((MAXPLAYERHEALTH) / 2)) + 1;
       }
       return roll;
    }
 
+   /**
+    * @param type
+    * @param name
+    * @param defence
+    * @param strength
+    * @param health
+    * @return String of the information
+    */
    private static String playerInfo(String type, String name, int defence,
                                     int strength, int health)
    {
