@@ -1,57 +1,97 @@
+import java.util.Random;
 
 public class Monster {
 
 	private String name;
-	private double str;
-	private double intel;
-	private double dex;
+	private int str;
+	private int intel;
+	private int dex;
 	private int hp;
+	private int maxHP;
 	private int mp;
 	private int lvl;
 
-	public Monster(String name, double str, double intel, double dex, int hp, int mp, int lvl) {
+	public Monster(String name, int str, int intel, int dex, int hp, int mp, int lvl) {
 		this.name = name;
 		this.str = str;
 		this.intel = intel;
 		this.dex = dex;
 		this.hp = hp;
+		this.maxHP = hp;
 		this.mp = mp;
 		this.lvl = lvl;
 	}
-
-	public String setName(String name) {
-		this.name = name;
-		return name;
-	}
-
-	public double setStr(double strength) {
-		this.str = strength;
-		return strength;
-	}
-
-	public double setInt(double intelligence) {
-		this.intel = intelligence;
-		return intelligence;
-	}
-
-	public double setDex(double dexterity) {
-		this.dex = dexterity;
-		return dexterity;
-	}
-
-	public int setHp(int health) {
-		this.hp = health;
-		return health;
+	
+	public void takeDMG(int totalDamage) {
+		hp -= totalDamage;
+		if (hp < 0)
+			hp = 0;
 	}
 	
-	public int setMp(int mp) {
-		this.mp = mp;
-		return mp;
+	public void healHP(int heal) {
+		hp += heal;
+		if (hp > maxHP)
+			hp = maxHP;
 	}
-
-	public int setLvl(int level) {
-		this.lvl = level;
-		return level;
+	
+	public void viewSingleMonster() {
 	}
-
+	
+	public void viewAllMonsters() {
+	}
+	
+	public String getName() {
+		return this.name;
+	}
+	
+	public int getStr() {
+		return this.str;
+	}
+	
+	public int getDex() {
+		return this.dex;
+	}
+	
+	public int getInt() {
+		return this.intel;
+	}
+	
+	public int getHP() {
+		return this.hp;
+	}
+	
+	public int getMAXHP() {
+		return this.maxHP;
+	}
+	
+	public void setHP() {
+		this.hp = maxHP;
+	}
+	
+	public int getMP() {
+		return this.mp;
+	}
+	
+	public int getLVL() {
+		return this.lvl;
+	}
+	
+	public int getAttack() {
+		int attack = 0;
+		return attack;
+	}
+	
+	public int getDefense() {
+		int defense = 0;
+		return defense;
+	}
+	
+	public String getAttackName() {
+		return "";
+	}
+	
+	public String getGuard() {
+		return "";
+	}
+	
 }

@@ -1,29 +1,29 @@
 import java.util.Random;
 
-public class FireMonster extends Monster {
+public class WaterMonster extends Monster {
 	
-	private String attack1 = "Flame Jet";
-	private String attack2 = "Fire Punch";
-	private String guard = "Molten Armor";
+	private String attack1 = "Water Cannon";
+	private String attack2 = "Ice Punch";
+	private String guard = "Frozen Armor";
 	private int attack;
 	private int defense;
 
-	public FireMonster(String name, int str, int intel, int dex, int hp, int mp, int lvl) {
+	public WaterMonster(String name, int str, int intel, int dex, int hp, int mp, int lvl) {
 		super(name, str, intel, dex, hp, mp, lvl);
-		this.attack = str + dex;
+		this.attack = dex + intel;
 		this.defense = intel + str + dex;
 	}
 	
 	@Override
 	public int getAttack() {
 		super.getAttack();
-		return this.attack;
+		return attack;
 	}
 	
 	@Override
 	public int getDefense() {
 		super.getDefense();
-		return this.defense;
+		return defense;
 	}
 	
 	@Override
@@ -45,12 +45,13 @@ public class FireMonster extends Monster {
 	public void viewSingleMonster() {
 		super.viewSingleMonster();
 		System.out.printf("%-15s %-10s %-12s %-15s %-13s %-10s %-10s %-10s %-10s %-10s%n", "Name:", "Type:", "Strength:", "Intelligence:", "Dexterity:", "Attack:", "Defense:", "Health:", "Mana:", "Level:");
-		System.out.printf("%-15s %-10s %-12s %-15s %-13s %-10s %-10s %-10s %-10s %-10s%n", super.getName(), getClass().getName().substring(0, 4), super.getStr(), super.getInt(), super.getDex(), attack, defense, super.getHP(), super.getMP(), super.getLVL());
+		System.out.printf("%-15s %-10s %-12s %-15s %-13s %-10s %-10s %-10s %-10s %-10s%n", super.getName(), getClass().getName().substring(0, 5), super.getStr(), super.getInt(), super.getDex(), attack, defense, super.getHP(), super.getMP(), super.getLVL());
 	}
 
 	@Override
 	public void viewAllMonsters() {
 		super.viewAllMonsters();
-		System.out.printf("%-15s %-10s %-12s %-15s %-13s %-10s %-10s %-10s %-10s %-10s%n", super.getName(), getClass().getName().substring(0, 4), super.getStr(), super.getInt(), super.getDex(), attack, defense, super.getHP(), super.getMP(), super.getLVL());
+		System.out.printf("%-15s %-10s %-12s %-15s %-13s %-10s %-10s %-10s %-10s %-10s%n", super.getName(), getClass().getName().substring(0, 5), super.getStr(), super.getInt(), super.getDex(), attack, defense, super.getHP(), super.getMP(), super.getLVL());
 	}
+	
 }
