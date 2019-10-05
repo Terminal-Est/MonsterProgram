@@ -1,70 +1,64 @@
 import java.util.Random;
 
 public class Player {
-	private String attack1 = "Groin Punch";
-	private String attack2 = "Throw Rock";
-	private String attack3 = "Shin Kick";
+	private String[] attacks = { "Groin Punch", "Throw Rock", "Shin Kick", "Backstab", "Roundhouse", "Jump Kick",
+			"Throat Punch", "Five-Finger Death Punch", "Superman Punch", "Kamehameha" };
 	private String guard = "Brace";
 	private String heal = "Pray";
-	private int playerHealth;
-	private int playerMAXHealth;
+	private int playerHP;
+	private int playerMAXHP;
 	private int playerStrength;
 	private int playerDefense;
-	
-	public Player(int playerHealth, int playerStrength, int playerDefense) {
-		this.playerHealth = playerHealth;
-		this.playerMAXHealth = playerHealth;
+
+	public Player(int playerHP, int playerStrength, int playerDefense) {
+		this.playerHP = playerHP;
+		this.playerMAXHP = playerHP;
 		this.playerStrength = playerStrength;
 		this.playerDefense = playerDefense;
 	}
-	
+
 	public int getHP() {
-		return this.playerHealth;
+		if (playerHP < 0)
+			playerHP = 0;
+		return this.playerHP;
 	}
-	
+
 	public void setHP() {
-		this.playerHealth = playerMAXHealth;
+		this.playerHP = playerMAXHP;
 	}
-	
+
 	public int getMAXHP() {
-		return this.playerMAXHealth;
+		return this.playerMAXHP;
 	}
-	
+
 	public void takeDMG(int totalDamage) {
-		playerHealth -= totalDamage;
+		playerHP -= totalDamage;
 	}
-	
+
 	public void healHP(int heal) {
-		playerHealth += heal;
-		if (playerHealth > playerMAXHealth)
-			playerHealth = playerMAXHealth;
+		playerHP += heal;
+		if (playerHP > playerMAXHP)
+			playerHP = playerMAXHP;
 	}
-	
+
 	public String getGuard() {
 		return this.guard;
 	}
-	
+
 	public String getHeal() {
 		return this.heal;
 	}
-	
+
 	public String getAttackName() {
 		Random rand = new Random();
-		int randomAttack = (rand.nextInt(3)) + 1;
-		switch (randomAttack) {
-		case 2:
-			return this.attack2;
-		case 3:
-			return this.attack3;
-		default:
-			return this.attack1;
-		}
+		int randomAttack = rand.nextInt(10);
+		return attacks[randomAttack];
 	}
-	
+
 	public int getStrength() {
 		return this.playerStrength;
 	}
-	
+
 	public int getDefense() {
 		return this.playerDefense;
 	}
