@@ -3,85 +3,83 @@ import java.util.Scanner;
 public class MonsterFighter {
 
 	private static Scanner sc;
-	private static int count;
 	private static Monster[] monsters;
+	private static int monCount;
 
 	public static void main(String[] args) {
-		monsters = new Monster[100];
+
 		sc = new Scanner(System.in);
-		count = 0;
+		monsters = new Monster[100];
+		monCount = 0;
 		String select;
+		String monSelect;
 		boolean exit = false;
-		while (exit == false) {
-			print("\nEnter your selection!" + "\n1 - Create a Monster" + "\n2 - Fight Monsters" + "\n3 - View a Monster"
-					+ "\n4 - Exit\nWhat do you choose?: ");
-			select = sc.next();
-			switch (select) {
-			case "1":
-				createMonster();
+
+		do {
+			System.out.printf("%n%s%n", "-----------------------------");
+			System.out.printf("%s%n", "--- Monster fighter game! ---");
+			System.out.printf("%s%n%n", "-----------------------------");
+			System.out.printf("%s%n", "Make your selection!");
+			System.out.printf("%s%n", "A: Create a Monster");
+			System.out.printf("%s%n", "B: View your Monsters");
+			System.out.printf("%s%n", "C: Fight Monsters");
+			System.out.print("\nEnter selection: ");
+			select = sc.nextLine();
+			switch (select.toUpperCase()) {
+			case "A":
+				if (monCount == 100) {
+					System.out.printf("%n%s%n", "Monster roster full!");
+				} else {
+					String name;
+					System.out.printf("%n%s", "Enter your Monster name: ");
+					name = sc.nextLine();
+					System.out.printf("%n%s%n", "What type of Monster would you like to create?");
+					System.out.printf("%s%n", "F: Fire Monster. Strong attack, weak defence");
+					System.out.printf("%s%n", "W: Water Monster. Strong dodge, well balanced");
+					System.out.printf("%s%n", "E: Earth Monster. Strong defence, weak attack");
+					System.out.print("\nEnter selection: ");
+					monSelect = sc.nextLine();
+					addMonster(monSelect, name);
+				}
 				break;
-			case "2":
+			case "B":
+				monsters[0].showMonster();
 				break;
-			case "3":
+			case "C":
 				break;
-			case "4":
+			case "X":
 				exit = true;
 				break;
 			default:
-				print("\nIncorrect option\n");
-				break;
+				System.out.printf("%n%s%n", "Invalid selection");
 			}
-		}
+		} while (exit == false);
+		System.exit(0);
 	}
 
-	private static void createMonster() {
-		String name = "";
-		String select = "";
-		boolean menu = false;
-		double str = 0;
-		double intel = 0;
-		double dex = 0;
-		int hp = 100;
-		int mp = 100;
-		int lvl = 1;
-		if (count == 100) {
-			print("Monster roster full!");
-		} else {
-			print("\nEnter Monster name: ");
-			name = sc.next();
-			print("\nRoll for STRENGTH!");
-			str = (Math.rint(Math.random() * 20));
-			print("\nStrength is: " + str);
-			print("\nRoll for INTELLIGENCE!");
-			intel = (Math.rint(Math.random() * 20));
-			print("\nIntelligence is: " + intel);
-			print("\nRoll for DEXTERITY!");
-			dex = (Math.rint(Math.random() * 20));
-			print("\nDexterity is: " + dex);
-			print("\nMonster HP is: " + hp);
-			print("\nMonster MP is: " + mp);
-			print("\nMonster Level is: " + lvl);
-			monsters[count] = new Monster(name, str, intel, dex, hp, mp, lvl);
-		}
-		print("\n\nSelect Monster type!" + "\n1 - Fire Monster, combines STRENGTH and DEXTERITY!"
-				+ "\n2 - Water Monster, combines DEXTERITY and INTELLIGENCE!"
-				+ "\n3 - Thunder Monster, combines INTELLIGENCE and STRENGTH!" + "\nEnter selection: ");
-		select = sc.next();
-		while (menu != true) {
-			switch (select) {
-			case "1":
-				print("\nFire Monster selected!");
-				monsters[count] = new FireMonster(name, str, intel, dex, hp, mp, lvl);
-				menu = true;
-				break;
-			default:
-				print("\nIncorrect option\n");
-			}
-		}
-	}
+	private static void addMonster(String selection, String name) {
 
-	private static String print(String input) {
-		System.out.print(input);
-		return input;
+		switch (selection.toUpperCase()) {
+		case "F":
+			monsters[monCount] = new Fire(name, 30, 25, 10);
+			monsters[monCount].setStats();
+			System.out.printf("%n%s%n", monsters[monCount].getClass() + " Monster created!");
+			monCount++;
+			break;
+		case "W":
+			monsters[monCount] = new Water(name, 20, 20, 30);
+			monsters[monCount].setStats();
+			System.out.printf("%n%s%n", monsters[monCount].getClass() + " Monster created!");
+			monCount++;
+			break;
+		case "E":
+			monsters[monCount] = new Earth(name, 10, 20, 35);
+			monsters[monCount].setStats();
+			System.out.printf("%n%s%n", monsters[monCount].getClass() + " Monster created!");
+			monCount++;
+			break;
+		default:
+			System.out.printf("%n%s%n", "Invalid selection");
+		}
 	}
 }
